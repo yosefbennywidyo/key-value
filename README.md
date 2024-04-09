@@ -22,7 +22,7 @@ This project provides a key-value store implemented in Elixir, utilizing Redis a
 ## Installation
 1. Clone the repository:
    ```sh
-   git clone <repository_url>
+   git clone git@github.com:yosefbennywidyo/key-value.git
    ```
 2. Install dependencies:
    ```sh
@@ -33,7 +33,7 @@ This project provides a key-value store implemented in Elixir, utilizing Redis a
 ### Starting the Application
 To start the application, run:
 ```sh
-mix run --no-halt
+mix phx.server
 ```
 
 ### Using the GraphQL API
