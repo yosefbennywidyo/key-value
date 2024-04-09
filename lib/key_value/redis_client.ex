@@ -9,8 +9,8 @@ defmodule KeyValue.RedisClient do
   For higher-level operations, see `KeyValue.Storage` module.
   """
 
-  @redis_host "localhost"  # Default Redis host
-  @redis_port 6379  # Default Redis port
+  @redis_host System.get_env("REDIS_HOST")  # Default Redis host
+  @redis_port System.get_env("REDIS_PORT")  # Default Redis port
 
   @doc """
   Starts a connection to Redis if not already started.
