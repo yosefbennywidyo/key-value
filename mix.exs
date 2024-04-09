@@ -9,7 +9,14 @@ defmodule KeyValue.MixProject do
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
-      deps: deps()
+      deps: deps(),
+      test_coverage: [tool: ExCoveralls],
+      preferred_cli_env: [
+        coveralls: :test,
+        "coveralls.detail": :test,
+        "coveralls.post": :test,
+        "coveralls.html": :test
+      ]
     ]
   end
 
@@ -47,7 +54,8 @@ defmodule KeyValue.MixProject do
       {:bandit, "~> 1.2"},
       {:absinthe, "~> 1.7"},
       {:absinthe_plug, "~> 1.5"},
-      {:redix, "~> 1.4"}
+      {:redix, "~> 1.4"},
+      {:excoveralls, "~> 0.10", only: :test}
     ]
   end
 
