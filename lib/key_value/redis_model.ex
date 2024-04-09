@@ -4,7 +4,9 @@ defmodule KeyValue.RedisModel do
   Interface for interacting with data stored in Redis.
   """
   
-  # Function to set a key-value pair in Redis
+  @doc """
+  Function to set a key-value pair in Redis.
+  """
   def set(key, value) do
     case KeyValue.RedisClient.set(key, value) do
     	{:ok, result} -> {:ok, result}
@@ -13,7 +15,9 @@ defmodule KeyValue.RedisModel do
     end
   end
 
-  # Function to retrieve the value for a key from Redis
+  @doc """
+  Function to retrieve the value for a key from Redis.
+  """
   def get(key) do
     case KeyValue.RedisClient.get(key) do
       {:ok, result} -> {:ok, result}
@@ -22,7 +26,9 @@ defmodule KeyValue.RedisModel do
     end
   end
 
-  # Function to transform the retrieved value if needed
+  @doc """
+  Function to transform the retrieved value if needed.
+  """
   def transform_result(%{value: nil} = result), do: result
   def transform_result(value), do: value
 end
