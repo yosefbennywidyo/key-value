@@ -2,10 +2,9 @@ import Config
 
 # Configure your database
 config :key_value, KeyValue.Repo,
-  username: "postgres",
-  password: "postgres",
-  hostname: "localhost",
-  database: "key_value_dev",
+  username: System.get_env("DATABASE_USERNAME"),
+  hostname: System.get_env("DATABASE_HOST"),
+  database: System.get_env("DATABASE_NAME"),
   stacktrace: true,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
