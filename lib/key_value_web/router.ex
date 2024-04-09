@@ -5,8 +5,16 @@ defmodule KeyValueWeb.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/api", KeyValueWeb do
+  scope "/" do
     pipe_through :api
+
+    forward "/graphiql", Absinthe.Plug.GraphiQL,
+      schema: KeyValueWeb.Schema,
+      interface: :simple
+      #context: %{pubsub: KeyValueWeb.Endpoint}
+
+    forward "/graphql", Absinthe.Plug,
+      schema: KeyValueWeb.Schema
   end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
