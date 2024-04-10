@@ -8,10 +8,6 @@ defmodule KeyValue.Application do
   @impl true
   def start(_type, _args) do
     children = [
-      %{
-        id: KeyValue.RedisClient,
-        start: {KeyValue.RedisClient, :start_link, []}
-      },
       KeyValueWeb.Telemetry,
       KeyValue.Repo,
       {DNSCluster, query: Application.get_env(:key_value, :dns_cluster_query) || :ignore},
