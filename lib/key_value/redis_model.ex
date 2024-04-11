@@ -10,7 +10,7 @@ defmodule KeyValue.RedisModel do
   def set(key, value) do
     case KeyValue.RedisClient.set(key, value) do
     	{:ok, result} -> {:ok, result}
-      {:error, :not_found} -> {:error, "Key not found"}
+      {:error, :redis_down} -> {:error, "Redis server is down"}
       {:error, "Key already exists"} -> {:error, "Key already exists"}
     end
   end
@@ -22,7 +22,7 @@ defmodule KeyValue.RedisModel do
     case KeyValue.RedisClient.get(key) do
       {:ok, result} -> {:ok, result}
       {:error, :not_found} -> {:error, "Key not found"}
-      {:error, reason} -> {:error, reason}
+      {:error, :redis_down} -> {:error, "Redis server is down"}
     end
   end
 

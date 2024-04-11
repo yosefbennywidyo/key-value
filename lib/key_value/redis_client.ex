@@ -8,6 +8,14 @@ defmodule KeyValue.RedisClient do
 
   For higher-level operations, see `KeyValue.Storage` module.
   """
+
+  def is_redis_up?() do
+    Process.flag(:trap_exit, true)
+    case Redix.start_link("redis://#{System.fetch_env!("REDIS_HOST")}:#{System.fetch_env!("REDIS_PORT")}", sync_connect: true, name: :redix) do
+      {:ok, _} -> true
+      {:error, _} -> false
+    end
+  end
   
   @doc """
   Starts a connection to Redis if not already started.
@@ -15,7 +23,11 @@ defmodule KeyValue.RedisClient do
   def start_link do
     case Process.whereis(:redix) do
       nil ->
-        Redix.start_link("redis://#{System.fetch_env!("REDIS_HOST")}:#{System.fetch_env!("REDIS_PORT")}", name: :redix)
+        case is_redis_up?() do
+          true -> {:ok, Process.whereis(:redix)}
+          false -> {:error, :redis_down}
+        end
+
       pid ->
         {:ok, pid}
     end 
@@ -34,7 +46,6 @@ defmodule KeyValue.RedisClient do
         case Redix.command(conn, ["EXISTS", key]) do
           {:ok, 1} -> true
           {:ok, 0} -> false
-          {:error, _} -> false
         end
     end
   end
@@ -54,7 +65,6 @@ defmodule KeyValue.RedisClient do
           false ->
             case Redix.command(conn, ["SET", key, value]) do
               {:ok, "OK"} -> {:ok, %{key: key, value: value}}
-              {:error, reason} -> {:error, reason}
             end
           other -> {:error, "Unexpected response from Redis EXISTS command: #{inspect(other)}"}
         end
@@ -80,7 +90,6 @@ defmodule KeyValue.RedisClient do
             else
               {:ok, %{key: key, value: result}}
             end
-          {:error, reason} -> {:error, reason}
         end
       {:error, reason} -> {:error, reason}
     end
@@ -100,11 +109,9 @@ defmodule KeyValue.RedisClient do
           true ->
             case Redix.command(conn, ["DEL", key]) do
               {:ok, _} -> :ok
-              {:error, reason} -> {:error, reason}
             end
           false -> :ok  # Key doesn't exist, so deletion is considered successful
         end
-      {:error, reason} -> {:error, reason}
     end
   end
 end

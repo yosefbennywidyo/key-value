@@ -37,7 +37,7 @@ defmodule KeyValue.RedisModelTest do
     test "retrieves the value for a key from Redis" do
     	check_key = RedisClient.exist("test_key")
     	if check_key do
-		  	:ok
+		  	{:ok, %{value: "test_value", key: "test_key"}}
 		  else
 		  	:ok = RedisClient.set("test_key", "test_value")
 		  	:ok
